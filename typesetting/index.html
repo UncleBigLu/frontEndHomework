@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body
+        {
+            background-color: #eee;
+        }
+        .column
+        {
+            margin: auto; /*Center the column*/
+            width: 44em;
+            background-color: white;
+            height: auto;
+            overflow: hidden;
+        }
+        .topBar
+        {
+            position: relative;
+            background-color: #3a8fff;
+            /*
+            Values before the slash set the horizontal radius and
+            values after the slash set the vertical slash.
+            */
+            border-radius: 0 0 50% 50%/0 0 100% 100%;
+            height: 2em;
+            padding-bottom: 0.5em;
+            width: 120%;
+            left: -10%;
+            color: white;
+            text-align: center;
+            font-family: "Microsoft Yahei";
+            font-size: 1.5em;
+            font-weight: bold;
+            line-height: 2.5em;
+        }
+        .subtitle
+        {
+            width: 50%;
+            height: 3em;
+            display: flex;
+            align-items: center;
+            margin-top: 3em;
+
+        }
+        .subtitleCircle
+        {
+            width: 2.5em;
+            height: 2.5em;
+            border-radius: 50%;
+            margin: 0.5em;
+            background-color: #ffffffbb;
+        }
+        .icons
+        {
+            background-image: url(./img/icons.png);
+            transform: scale(0.9, 0.9);
+            width: 2.5em;
+            height: 2.5em;
+        }
+        .subtitleText
+        {
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: "Microsoft yahei";
+            color: #ffffffbb;
+        }
+        #triangle
+        {
+            position: relative;
+            left: 1.5em;
+            width: 0;
+            height: 0;
+            border-bottom: 1.5em solid #aaddff;
+            border-right: 1.5em solid #00000000;
+            
+        }
+        #roundRect
+        {
+            background-color: #aaddff;
+            padding: 0.5em;
+            border-radius: 2em;
+            position: relative;
+            height: 7.5em;
+            line-height: 2em;
+            
+        }
+        .rightTitle
+        {
+            position: relative;
+            left: 50%;
+            display: flex;
+            justify-content: right;
+        }
+        .leftBlock
+        {
+            display: inline-block;
+            width: 25%;
+            margin-left: 2em;
+            position: relative;
+            margin-top: 2em;
+        }
+        .rightBlock
+        {
+            display: inline-block;
+            width: 60%;
+            vertical-align: top;
+            margin-top: 2em;
+        }
+        .boldTitle
+        {
+            font-weight: bold;
+            font-family: "Microsoft yahei";
+        }
+        .smallText
+        {
+            font-size: 0.8em;
+        }
+        .lastText
+        {
+            margin-left: 4em;
+            line-height: 3em;
+        }
+        /*180*90 img size*/
+        /*
+        .icons
+        {
+            
+            width: 1.5em;
+            height: 1.5em;
+            border-width: 0.5em;
+            border-radius: 50%;
+            background-color: #ffffffbb;
+            background-image: url(./img/icons.png);
+            background-position: bottom -6px right 87px;
+            background-size: 500%;
+            overflow: hidden;
+            
+            display: inline-block;
+        }
+        */
+    </style>
+</head>
+<body>
+    <div class="column">
+        <div class="topBar">
+            个人简历
+        </div>
+    
+        <div class="subtitle" style="background-image: linear-gradient(to right, #3a8fff, white);">
+            <div class="subtitleCircle">
+                <div class="icons" style="background-position: -93px -47px;"></div>
+            </div>
+            <div class="subtitleText">威震天</div>
+        </div>
+    
+        <div style="margin: 0 4em 4em;">
+            <div >
+                <p>Web前端开发工程师、网页设计师</p>
+            </div>
+            <div class="bubble">
+                <div id="triangle"></div>
+                <div id="roundRect">
+                    <p>我叫威震天，机器人，今年28岁，毕业于四川大学计算机科学与技术学院，
+                        主修计算机科学与技术，精通HTML 5、CSS 3、jQuery、JavaScript，
+                        熟练使用各种Web开发和设计工具。
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+    
+        <div class="subtitle rightTitle" style="
+        background-image: linear-gradient(to left, #0b9228, white);">
+            <h3 class="subtitleText rightText">工作经验</h3>
+            <div class="subtitleCircle">
+                <div class="icons" style="background-position: -47px -2px;"></div>
+            </div>
+        </div>
+        <div>
+            <div class="leftBlock">
+                <div class="boldTitle">
+                    XX科技有限公司
+                </div>
+                <p class="smallText">
+                    Web前端开发工程师<br/>
+                    2013.09-2015.06
+                </p>
+            </div>
+            <div class="rightBlock">
+                    利用(x)HTML/CSS/JavaScript/Flash等各种Web技术进行客户端产品的开发。
+                    完成客户端程序（也就是浏览器端）的开发，开发JavaScript以及Flash模块，
+                    同时结合后台开发技术模拟整体效果，进行丰富互联网的Web开发，致力于通过技术
+                    改善用户体验。
+            </div>
+        </div>
+        <div>
+            <div class="leftBlock">
+                <div class="boldTitle">
+                    XX信息公司
+                </div>
+                <p>
+                    Web前端开发工程师<br/>
+                    Web前端设计师<br/>
+                    2011.07-2013.08
+                </p>
+            </div>
+            <div class="rightBlock">
+                <p>
+                    开发JavaScript以及Flash模块，同时结合后台开发技术模拟整体效果，进行丰富互联网的
+                    Web开发，致力于通过技术改善用户体验。
+                </p>
+            </div>
+        </div>
+        <div class="subtitle" style="background-image: linear-gradient(to right, #8d8d0b, white);">
+            <div class="subtitleCircle">
+                <div class="icons" style="background-position: -2px -2px;"></div>
+            </div>
+            <div class="subtitleText">
+                个人技能
+            </div>
+
+        </div>
+        <div class="leftBlock">
+            <div class="boldTitle">
+                HTML 5
+            </div>
+        </div>
+        <div class="rightBlock">
+            精通并熟练使用
+        </div>
+        <div class="leftBlock">
+            <div class="boldTitle">
+                CSS 3
+            </div>
+        </div>
+        <div class="rightBlock">
+            精通并熟练使用
+        </div>
+        <div class="leftBlock">
+            <div class="boldTitle">
+                JavaScript
+            </div>
+        </div>
+        <div class="rightBlock">
+            精通并熟练使用
+        </div>
+
+        <div class="subtitle rightTitle" style="background-image:linear-gradient(to left, #ff8903, white);">
+            <div class="subtitleText">
+                教育背景
+            </div>
+            <div class="subtitleCircle">
+                <div class="icons" style="background-position: -47px -2px;"></div>
+            </div>
+        </div>
+
+        <div class="leftBlock">
+            <div class="boldTitle">
+                四川大学
+            </div>
+            <div class="smallText">
+                计算机科学与技术专业<br>
+                2007.06-2011.06
+            </div>
+        </div>
+
+        <div class="rightBlock">
+            主要学习高等数学、线性代数、概率论和数理统计、
+            离散数学、组合数学、计算机原理、人工智能、程序设计基础、
+            面向对象程序设计、数字逻辑电路、模拟电子技术、数据结构、算法设计、
+            WEB程序设计、计算机组成与结构、操作系统、数据库系统原理、编译原理、
+            计算机网络、网络工程、软件工程、数据库应用、信息安全、微型计算机技术、
+            汇编语言、单片机技术、嵌入式系统、嵌入式操作系统、嵌入式设计与应用、
+            移动设备应用软件开发等。
+        </div>
+
+
+        <div class="subtitle" style="background-image: linear-gradient(to right, #ff0404, #fff);">
+            <div class="subtitleCircle">
+                <div class="icons" style="background-position: -2px -47px;"></div>
+            </div>
+            <div class="subtitleText">获得荣誉</div>
+        </div>
+        <p class="lastText">
+            CET-6英语六级，优秀的听说写能力<br>
+            四川大学教学信息化大奖赛一等奖<br>
+            被Web前段老师极度赞赏
+        </p>
+    </div>
+    
+</body>
+</html>
