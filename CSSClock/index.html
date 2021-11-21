@@ -39,17 +39,45 @@
         transform: rotate(-45deg);
     }
     .clockNums{
-        text-shadow: .2em .2em .2em;
+        text-shadow: .5vmin .5vmin 1vmin black;
         font-size: 10vmin;
+        color: rgba(240, 240, 240, 0.8);
+        position:absolute;
+    }
+    .hour_p{
+        width:0;
+        height: 34vmin;
+        position: absolute;
+        transform-origin: 2.4vmin 2.4vmin;
+        top: 44vmin;
+        left:45vmin;
+        border-top: 2.4vmin solid #0056a2;
+        border-left: 2.4vmin solid #0056a2;
+        border-bottom: 2.4vmin solid #0081f3;
+        border-right: 2.4vmin solid #0081f3;
+        border-radius: 17vmin;
+        background-color: #0056a2;
+        background-clip: padding-box;
+
+        animation-name: pointerRoutate;
+        animation-duration: 30s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+    @keyframes pointerRoutate {
+        0%{ transform: rotate(0) }
+        100%{ transform: rotate(360deg) }
     }
 </style>
 <body>
     <div id="clockBorder">
-        <div class="clockNums">12</div>
-        <div class="clockNums">3</div>
-        <div class="clockNums">6</div>
-        <div class="clockNums">9</div>
-
+        <div class="clockNums" style="left: 42vmin; top: 2vmin">12</div>
+        <div class="clockNums" style="right: 2vmin; top: 40vmin">3</div>
+        <div class="clockNums" style="left: 47vmin; top: 80vmin">6</div>
+        <div class="clockNums" style="left: 2vmin; top:40vmin">9</div>
+        <div class="hour_p"></div>
+        <div class="minute_p"></div>
+        <div class="second_p"></div>
     </div>
 </body>
 </html>
