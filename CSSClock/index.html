@@ -44,7 +44,7 @@
         color: rgba(240, 240, 240, 0.8);
         position:absolute;
     }
-    .hour_p{
+    .minute_p{
         width:0;
         height: 34vmin;
         position: absolute;
@@ -64,9 +64,61 @@
         animation-iteration-count: infinite;
         animation-timing-function: linear;
     }
+    .hour_p{
+        width: 0;
+        height: 30vmin;
+
+        background-clip: padding-box;
+        background-color: black;
+        border-top: 3vmin solid #000000;
+        border-left: 3vmin solid #000000;
+        border-bottom: 3vmin solid #565656;
+        border-right: 3vmin solid #565656;
+        border-radius: 3vmin;
+
+        position: absolute;
+        transform-origin: 3vmin 3vmin;
+        top: 44vmin;
+        left: 44vmin;
+
+        animation-name: pointerRoutate;
+        animation-duration: 360s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+
+    }
+    #clockBorder:hover .second_p{
+        width: 0;
+        height: 35vmin;
+
+        background-color: red;
+        background-clip: padding-box;
+        border-top: 1.6vmin solid #b31919;
+        border-left: 1.6vmin solid #b31919;
+        border-bottom: 1.6vmin solid #ff1919;
+        border-right: 1.6vmin solid #ff1919;
+        border-radius: 1.6vmin;
+
+        position: absolute;
+        transform-origin: 1.6vmin 1.6vmin;
+        top: 45vmin;
+        left: 45vmin;
+
+        animation-name: pointerRoutate;
+        animation-duration: 60s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    #clockBorder:hover .hour_p{
+        animation-duration: 86400s;
+    }
+    #clockBorder:hover .minute_p{
+        animation-duration: 3600s;
+    }
     @keyframes pointerRoutate {
-        0%{ transform: rotate(0) }
-        100%{ transform: rotate(360deg) }
+        0%{ transform: rotate(180deg) }
+        100%{ transform: rotate(540deg) }
     }
 </style>
 <body>
