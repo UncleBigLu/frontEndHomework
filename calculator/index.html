@@ -14,6 +14,7 @@
             background-color: #aaaaaa;
         }
         .calculator{
+            position: relative;
             width: 40vmin;
             height: 63vmin;
             background-color: #eeeeee;
@@ -25,9 +26,7 @@
             border-radius: 2vmin;
             box-shadow: 2vmin 2vmin 2vmin #888888 ;
 
-            display: flex;
-            wrap-option: wrap;
-            justify-content: center;
+
         }
         .screen{
             width: 35vmin;
@@ -41,15 +40,60 @@
 
             position: relative;
             top: 2vmin;
+            left: 2vmin;
         }
         .button{
+            padding: 0;
+            margin: 0;
             height: 8vmin;
             width: 8vmin;
             border-radius: 4vmin;
+            box-sizing: border-box;
 
+            position: absolute;
+            border: solid black .1vmin;
+
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        #c{
+        #button_c{
             background-color: red;
+            top: 14vmin;
+            left: 3vmin;
+            box-shadow: 0.2vmin 0.2vmin 0.2vmin #f8b0b0 inset,
+            -0.2vmin -.2vmin .2vmin #bd2a2a inset;
+        }
+        .char{
+            font-size: 4vmin;
+            font-family: "Arial",serif;
+            font-weight: bold;
+        }
+        #char_c{
+            color: white;
+        }
+        #button_equal{
+            background-color: orange;
+            top: 14vmin;
+            right: 3vmin;
+            box-shadow: 0.2vmin 0.2vmin 0.2vmin #f8c1b0 inset,
+            -0.2vmin -.2vmin .2vmin #bd872a inset;
+        }
+        #char_operator{
+            color: white;
+        }
+        .char_num{
+            color: #3e4a55;
+        }
+        .button_num{
+            background-color: #dee2e5;
+            box-shadow: 0.2vmin 0.2vmin 0.2vmin #fff9f8 inset,
+            -0.2vmin -.2vmin .2vmin #98a1ac inset;
+        }
+        #button_7{
+            left: 3vmin;
+            top: 24vmin;
         }
     </style>
 </head>
@@ -58,9 +102,46 @@
         <div class="screen">
 
         </div>
-        <div class="button" id="c">
-
+        <div class="button" id="button_c">
+            <div class="char" id="char_c">C</div>
         </div>
+        <div class="button" id="button_equal">
+            <div class="char" id="char_operator">=</div>
+        </div>
+        <div class="button button_num" id="button_7">
+            <div class="char char_num">7</div>
+        </div>
+        <div class="button button_num" id="button_8">
+            <div class="char char_num">8</div>
+        </div>
+        <div class="button button_num" id="button_9">
+            <div class="char char_num">9</div>
+        </div>
+        <div class="button button_num" id="button_4">
+            <div class="char char_num">4</div>
+        </div>
+        <div class="button button_num" id="button_5">
+            <div class="char char_num">5</div>
+        </div>
+        <div class="button button_num" id="button_6">
+            <div class="char char_num">6</div>
+        </div>
+        <div class="button button_num" id="button_1">
+            <div class="char char_num">1</div>
+        </div>
+        <div class="button button_num" id="button_2">
+            <div class="char char_num">2</div>
+        </div>
+        <div class="button button_num" id="button_3">
+            <div class="char char_num">3</div>
+        </div>
+        <div class="button button_num" id="button_0">
+            <div class="char char_num">0</div>
+        </div>
+        <div class="button" id="button_dot">
+            <div class="char char_num">.</div>
+        </div>
+        
     </div>
 </body>
 </html>
