@@ -263,7 +263,11 @@
 
     button_equal.onclick = (e) => {
         console.log(expression.innerText)
-
+        if(expression.innerText.indexOf("**") !== -1)
+        {
+            expression.innerText = "Illegal"
+            return;
+        }
         expression.innerText = String(eval(expression.innerText))
     }
 </script>
