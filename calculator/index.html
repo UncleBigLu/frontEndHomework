@@ -154,11 +154,13 @@
             font-size: 3em;
             color: #0F0;
             padding-left: 0.2em;
+            padding-top: .1em;
             height: 100%;
             width: 100%;
             background-color: #0000;
             border: none;
             outline: none;
+
         }
     </style>
 </head>
@@ -166,7 +168,7 @@
 <body>
     <div class="calculator">
         <div class="screen">
-            <input id="expression" />
+            <div id="expression"></div>
         </div>
 
         <div class=" digit_pannel">
@@ -230,7 +232,7 @@
 <script>
     function decoretor(x) {
         return function () {
-            expression.value += String(x)
+            expression.innerText += String(x)
         }
     }
 
@@ -256,13 +258,13 @@
     button_dot.onclick = decoretor('.')
 
     button_c.onclick = (e) => {
-        expression.value = ''
+        expression.innerText = ''
     }
 
     button_equal.onclick = (e) => {
-        console.log(expression.value)
+        console.log(expression.innerText)
 
-        expression.value = String(eval(expression.value))
+        expression.innerText = String(eval(expression.innerText))
     }
 </script>
 
