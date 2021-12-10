@@ -63,10 +63,24 @@
             align-items: center;
         }
 
+        .button:hover{
+            cursor: pointer;
+        }
+        .button:hover>div{
+            color: #00FF00;
+        }
+        .button:active>div{
+            color: #bd2a2a;
+        }
+
         #button_c {
             background-color: red;
             box-shadow: 0.2vmin 0.2vmin 0.2vmin #f8b0b0 inset,
                 -0.2vmin -.2vmin .2vmin #bd2a2a inset;
+        }
+        #button_c:active{
+            box-shadow: 0.2vmin 0.2vmin 0.2vmin #bd2a2a inset,
+            -0.2vmin -.2vmin .2vmin  #f8b0b0 inset;
         }
 
         .char {
@@ -83,6 +97,11 @@
                 -0.2vmin -.2vmin .2vmin #bd872a inset;
         }
 
+        #button_equal:active {
+            box-shadow: 0.2vmin 0.2vmin 0.2vmin #bd872a inset,
+            -0.2vmin -.2vmin .2vmin #f8c1b0 inset;
+        }
+
         .char_operator {
             color: white;
         }
@@ -97,10 +116,20 @@
                 -0.2vmin -.2vmin .2vmin #98a1ac inset;
         }
 
+        .button_num:active {
+            box-shadow: 0.2vmin 0.2vmin 0.2vmin #98a1ac inset,
+            -0.2vmin -.2vmin .2vmin #fff9f8 inset;
+        }
+
         .button_operator {
             background-color: grey;
             box-shadow: 0.2vmin 0.2vmin 0.2vmin #bdbaba inset,
                 -0.2vmin -.2vmin .2vmin #5f656a inset;
+        }
+
+        .button_operator:active {
+            box-shadow: 0.2vmin 0.2vmin 0.2vmin #5f656a inset,
+            -0.2vmin -.2vmin .2vmin #bdbaba inset;
         }
 
         #button_add {
