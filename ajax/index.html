@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    li {
+        /* margin-left: 40px; */
+    }
+
+    li>li {
+        margin-left: 20px;
+    }
+</style>
+
+<body>
+    <div style="display: flex;">
+        <div style="height: 50vh; width: 50vw; border: 10px solid black; box-sizing: border-box;" id="div_left">
+        </div>
+
+        <div style="height: 30vh; width: 50vw; border: 10px solid black; box-sizing: border-box;" id="div_right">
+        </div>
+    </div>
+
+    <script>
+        function getPromise(url) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "http://ext.gaomuxuexi.com:5870/task/random", true);
+                xhr.send();
+                let list = null, tree = null;
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (xhr.status === 200) {
+                            resolve(json);
+                        }
+                        else {
+                            reject(json);
+                        }
+                    }
+                }
+            })
+            };
+
+            function getTreeNode(text) {
+                const newul = document.createElement("ul")
+                const newli = document.createElement("li")
+                newli.innerHTML = text
+                newul.appendChild(newli)
+                return newul;
+            }
+            function appendChildTo(node, obj) {
+                if (!obj) return
+                const newnode = getTreeNode(obj.N);
+                // console.log(newnode)
+                for (let el of obj.C) {
+                    // console.log(el)
+                    appendChildTo(newnode, el)
+                }
+                node.appendChild(newnode)
+        }
+
+        const request = getPromise("http://ext.gaomuxuexi.com:5870/task/random");
+        request.then(res => {
+            console.log(res)
+            list = res.list
+            tree = res.tree
+            appendChildTo(div_left, tree)
+
+            console.log(list)
+            for (let el of list) {
+                div_right.appendChild(getTreeNode(el.name))
+            }
+            // console.log(div_left.appendChild(getTreeNode("Hello")))
+        }).catch(err => console.log(err))
+    </script>
+</body>
+
+</html>
