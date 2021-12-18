@@ -1,85 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            margin: 0;
+            font-size: 20px;
+            cursor: default;
+        }
+        ul{
+            list-style-type: none;
+            margin-block: 0.5em;
+        }
+        .box1{
+            position: absolute;
+            width: calc(60vw - 19px);
+            height: 500px;
+            left: 5px;
+            top: 5px;
+            border: 1px solid #888;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .list{
+            position: relative;
+            margin: 0.5em 0;
+            font: normal 1em/1.5em Arial;
+            color:#555;
+            white-space: pre;
+        }
+        .fold{
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            left: -1em;
+            top: 0.25em;
+            position: absolute;
+            text-align: center;
+            font: bold 1em/1em 宋体;
+            border: 1px dotted #888;
+            box-sizing: border-box;
+        }
+        .circle{
+            display: inline-block;
+            font: normal 1em/1.5em Arial;
+            height: 1.5em;
+            width: 1.5em;
+            text-align: center;
+            margin: 0 0.3em;
+            background: #00f;
+            color: #fff;
+            border-radius: 100%;
+        }
+        .circle2{
+            display: inline-block;
+            font: normal 1em/1.5em Arial;
+            height: 1.5em;
+            width: 1.5em;
+            text-align: center;
+            margin: 0 0.3em;
+            background: #f0f;
+            color: #fff;
+            border-radius: 100%;
+        }
+        .box2{
+            position: absolute;
+            box-sizing: border-box;
+            width: 40vw;
+            height: 300px;
+            right: 5px;
+            top: 5px;
+            border: 1px solid #888;
+            padding: 0 14px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .score{
+            float: right;
+            color:#0a0;
+        }
+        .score2{
+            float: right;
+            color:#f00;
+        }
+        .buttonR{
+            position: absolute;
+            width: 72px;
+            height: 43px;
+            top: 310px;
+            right:20vw;
+            margin-right: -32px;
+            text-align: center;
+            font-size: 28px;
+            overflow: hidden;
+        }
+    </style>
+    <title>Ajax实现窗格</title>
 </head>
-
-<style>
-    li {
-        /* margin-left: 40px; */
-    }
-
-    li>li {
-        margin-left: 20px;
-    }
-</style>
-
 <body>
-    <div style="display: flex;">
-        <div style="height: 50vh; width: 50vw; border: 10px solid black; box-sizing: border-box;" id="div_left">
-        </div>
+<div id="box1" class="box1"></div>
+<div id="box2" class="box2"></div>
+<input type="button" id="refresh" class="buttonR" value="刷新" onclick="refresh()">
+<script>
+    window.onload = refresh;
+    function refresh(){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var box1 = document.getElementById("box1");
+                var box2 = document.getElementById("box2");
+                var data =  JSON.parse(this.responseText);
+                if(data.no == 200){
+                    box1.innerHTML="";
+                    box2.innerHTML="";
+                    var ul = document.createElement("ul");
+                    box1.appendChild(ul);
+                    var li = document.createElement("li");
+                    li.className = "list";
+                    ul.appendChild(li);
+                    createTree(li,data.tree);
 
-        <div style="height: 30vh; width: 50vw; border: 10px solid black; box-sizing: border-box;" id="div_right">
-        </div>
-    </div>
-
-    <script>
-        function getPromise(url) {
-            return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", "http://ext.gaomuxuexi.com:5870/task/random", true);
-                xhr.send();
-                let list = null, tree = null;
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4) {
-                        let json = JSON.parse(xhr.responseText);
-                        if (xhr.status === 200) {
-                            resolve(json);
+                    var ul2 = document.createElement("ul");
+                    ul2.style.padding = 0;
+                    box2.appendChild(ul2);
+                    for(var i=0;i<data.list.length;i++){
+                        var li = document.createElement("li");
+                        li.className = "list";
+                        ul2.appendChild(li);
+                        var circle = document.createElement("span");
+                        if(data.list[i].gender == 1){
+                            circle.className = "circle";
                         }
-                        else {
-                            reject(json);
+                        else{
+                            circle.className = "circle2";
                         }
+                        var text = document.createTextNode(i+1);
+                        circle.appendChild(text);
+                        li.appendChild(circle);
+                        var score = document.createElement("b");
+                        if(data.list[i].score >= 60){
+                            score.className = "score";
+                        }
+                        else{
+                            score.className = "score2";
+                        }
+                        var text2 = document.createTextNode(data.list[i].score);
+                        score.appendChild(text2);
+                        li.appendChild(score);
+                        var text3 = document.createTextNode(" #" + data.list[i].sno + "  " + data.list[i].name);
+                        li.appendChild(text3);
                     }
                 }
-            })
-            };
-
-            function getTreeNode(text) {
-                const newul = document.createElement("ul")
-                const newli = document.createElement("li")
-                newli.innerHTML = text
-                newul.appendChild(newli)
-                return newul;
-            }
-            function appendChildTo(node, obj) {
-                if (!obj) return
-                const newnode = getTreeNode(obj.N);
-                // console.log(newnode)
-                for (let el of obj.C) {
-                    // console.log(el)
-                    appendChildTo(newnode, el)
+                else if(data.no == 500){
+                    window.alert(data.msg);
                 }
-                node.appendChild(newnode)
-        }
+                else{
 
-        const request = getPromise("http://ext.gaomuxuexi.com:5870/task/random");
-        request.then(res => {
-            console.log(res)
-            list = res.list
-            tree = res.tree
-            appendChildTo(div_left, tree)
+                }
 
-            console.log(list)
-            for (let el of list) {
-                div_right.appendChild(getTreeNode(el.name))
             }
-            // console.log(div_left.appendChild(getTreeNode("Hello")))
-        }).catch(err => console.log(err))
-    </script>
-</body>
+        };
+        xhttp.open("GET", "http://ext.gaomuxuexi.com:5870/task/random", true);
+        xhttp.send();
+    }
 
+    function createTree(root,data){
+        if(data.C.length>=1){
+            var fold = document.createElement("span");
+            root.appendChild(fold);
+            fold.className = "fold";
+            fold.setAttribute("onclick","fold()");
+            var text2 = document.createTextNode("-");
+            fold.appendChild(text2);
+        }
+        var circle = document.createElement("span");
+        circle.className = "circle";
+        root.appendChild(circle);
+        var text3 = document.createTextNode(data.id);
+        circle.appendChild(text3);
+        var text = document.createTextNode(data.N);
+        root.appendChild(text);
+        if(data.C.length>0){
+            var ul = document.createElement("ul");
+            root.appendChild(ul);
+            for(var i=0;i<data.C.length;i++){
+                var li = document.createElement("li");
+                li.className = "list";
+                ul.appendChild(li);
+                createTree(li,data.C[i]);
+            }
+        }
+    }
+
+    function fold(){
+        var state = event.target.innerHTML;
+        var uls = event.target.parentNode.getElementsByTagName("ul");
+        if(state=="-"){
+            event.target.innerHTML="+";
+            for(var i=0;i<uls.length;i++){
+                uls[i].style.display="none";
+            }
+        }
+        else{
+            event.target.innerHTML="-";
+            for(var i=0;i<uls.length;i++){
+                uls[i].style.display="block";
+            }
+        }
+    }
+</script>
+</body>
 </html>
