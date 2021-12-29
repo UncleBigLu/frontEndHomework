@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<!--
+  形状破译：
+  0: 坚定不移的根
+  1: 空心圆圈
+  2: 实心圆圈
+  3: 空心正方
+  4: 实心正方
+
+  #sc_tk6 [ico]{
+  	display:inline-block;box-shadow:inset 0 0 0 1px #00f;
+  	vertical-align:middle;width:1em;height:1em;margin:0 .5em
+  }
+  #sc_tk6 [ico="0"]{
+  	border-radius:0 .5em;box-shadow:inset 0 0 0 1px #00f,inset .2em .2em 0 .2em #00f;
+  }
+  #sc_tk6 [ico="1"]{border-radius:1em}
+  #sc_tk6 [ico="2"]{border-radius:1em;background:#00f}
+  #sc_tk6 [ico="4"]{background:#00f}
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      cursor: default;
+      font-size: 20px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    ul {
+      list-style-type: none;
+      margin-block-start: 0.5em;
+      margin-block-end: 0.5em;
+    }
+    li {
+      position: relative;
+      margin: 0.5em 0;
+      font: normal 1em/1.5em Arial;
+      color: #555;
+    }
+
+    li::marker {
+      display: none;
+    }
+
+    ul li {
+      /* padding-left: 5px; */
+    }
+
+    [ico] {
+      content: "";
+      display: inline-block;
+      box-shadow: inset 0 0 0 1px #00f;
+      vertical-align: middle;
+      width: 1em;
+      height: 1em;
+      margin: 0 0.5em;
+    }
+    [ico="0"] {
+      border-radius: 0 0.5em;
+      box-shadow: inset 0 0 0 1px #00f, inset 0.2em 0.2em 0 0.2em #00f;
+    }
+    [ico="1"] {
+      border-radius: 1em;
+      background: inherit;
+    }
+    [ico="2"] {
+      border-radius: 1em;
+      background: #00f;
+    }
+    [ico="3"] {
+      border-radius: inherit;
+      background: inherit;
+      /* nothing */
+    }
+    [ico="4"] {
+      border-radius: inherit;
+      background: #00f;
+    }
+
+    [notleaf="true"] {
+      position: relative;
+      right: 1.5em;
+      /* font-size: 2em; */
+      /* border: 1px solid black; */
+      /* background-color: rebeccapurple; */
+    }
+    [notleaf="true"]::before {
+      content: '+';
+      text-align: center;
+      font-size: 1em;
+      left: 1em;
+      top: -10em;
+      height: 1.5em;
+      width: 1.5em;
+      border: 2px solid black;
+      display: inline-block;
+    }
+  </style>
+
+  <body>
+    <div style="display: flex">
+      <div
+        style="
+          height: 50vh;
+          width: 60vw;
+          border: 2px solid black;
+          overflow-y: scroll;
+        "
+        id="div_left"
+      ></div>
+
+      <div
+        style="
+          height: 50vh;
+          width: 40vw;
+          border: 2px solid black;
+          overflow-y: scroll;
+        "
+        id="div_right"
+      ></div>
+    </div>
+    <div style="float: right; margin-right: 20px">
+      <button onclick="refresh()">刷新</button>
+      <button onclick="commit()">提交</button>
+    </div>
+
+    <a style="border: 2px solib black">+</a>
+  </body>
+
+  <script>
+    window.onload = refresh;
+
+    /**
+     * XMLHttpRequest的Promise封装
+     **/
+    function XHRPromise(url) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.send();
+        let list = null,
+          tree = null;
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            let json = JSON.parse(xhr.responseText);
+            if (xhr.status === 200) {
+              resolve(json);
+            } else {
+              reject(json);
+            }
+          }
+        };
+      });
+    }
+
+    function refresh() {
+      XHRPromise("http://ext.gaomuxuexi.com:5870/task/nodes")
+        .then((res) => {
+          console.log("请求成功");
+          console.log(res);
+          const jsonlist = res.list;
+          const jsontree = res.tree;
+
+          buildList(div_right, jsonlist);
+          buildTree(div_left, jsontree);
+        })
+        .catch((err) => {
+          console.error(err);
+          if ("X" + err.on === "X500") {
+            alert("服务器错误。请稍后再试。");
+          } else {
+            alert(
+              "发生错误，请查看控制台\n[ERROR] Request failed. Please refer to console for detailed information."
+            );
+          }
+        })
+        .finally((res) => {
+          console.log(res);
+        });
+    }
+
+    function buildList(parent, jsonlist) {
+      for (const obj of jsonlist) {
+        const item = getItem(obj.type, obj.N);
+
+        // Drag away
+        item.draggable = "true";
+
+        // Drag over
+        item.ondragover = (event) => event.preventDefault();
+        item.ondrop = (event) => console.log(event);
+        parent.appendChild(item);
+      }
+    }
+
+    function buildTree(parent, jsontree) {
+      console.log(jsontree.type);
+      if (!jsontree) {
+        console.error("空树！");
+        return;
+      }
+      const newnode = getItem(jsontree.type, jsontree.N);
+      if (jsontree.C.length !== 0) {
+        for (const obj of jsontree.C) {
+          buildTree(newnode, obj);
+        }
+        newnode.setAttribute("notleaf", "true")
+      } else {
+        newnode.setAttribute("notleaf", "false")
+      }
+      const warpper = document.createElement("ul");
+      warpper.appendChild(newnode);
+
+
+      // Drag away
+        warpper.draggable = "true";
+
+        // Drag over
+        warpper.ondragover = (event) => event.preventDefault();
+        warpper.ondrop = (event) => console.log(event);
+      parent.appendChild(warpper);
+    }
+
+    function getItem(type, content) {
+      const newchild = document.createElement("li");
+      const ico = document.createElement("i");
+      ico.setAttribute("ico", type.toString());
+      newchild.appendChild(ico);
+      newchild.innerHTML += content;
+      newchild.classList.add("listItem");
+      // newchild.setAttribute("ico", type.toString());
+
+      return newchild;
+    }
+
+    function dropOverTree(event) {
+      console.log(event);
+    }
+  </script>
+</html>

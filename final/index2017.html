@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        font-size: 20px;
+        cursor: default;
+      }
+      ul {
+        list-style-type: none;
+        margin-block-start: 0.5em;
+        margin-block-end: 0.5em;
+      }
+      .box1 {
+        position: absolute;
+        width: calc(60vw - 19px);
+        height: 500px;
+        left: 5px;
+        top: 5px;
+        border: 1px solid #535353;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      .box2 {
+        position: absolute;
+        box-sizing: border-box;
+        width: 40vw;
+        height: 500px;
+        right: 5px;
+        top: 5px;
+        border: 1px solid #535353;
+        padding: 0 14px;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      .list {
+        position: relative;
+        margin: 0.5em 0;
+        font: normal 1em/1.5em Arial;
+        color: #555;
+        white-space: pre;
+      }
+      .list-selected {
+        position: relative;
+        margin: 0.5em 0;
+        font: normal 1em/1.5em Arial;
+        color: #555;
+        background-color: #08c6e763;
+        white-space: pre;
+      }
+      .list-dragover {
+        position: relative;
+        margin: 0.5em 0;
+        font: normal 1em/1.5em Arial;
+        color: #555;
+        background-color: #e7e3088f;
+        white-space: pre;
+      }
+      .fold {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        left: -1em;
+        top: 0.25em;
+        position: absolute;
+        text-align: center;
+        font: bold 1em/1em 宋体;
+        border: 1px dotted #888;
+        box-sizing: border-box;
+      }
+      .icon0 {
+        position: relative;
+        display: inline-block;
+        font: normal 1em/1.5em Arial;
+        top: -0.1em;
+        width: 0;
+        height: 0;
+        text-align: center;
+        margin: 0 0.3em;
+        border-left: 0.5em solid transparent;
+        border-right: 0.5em solid transparent;
+        border-top: 0.35em solid red;
+        vertical-align: middle;
+      }
+      .icon0::before {
+        position: absolute;
+        display: inline-block;
+        font: normal 1em/1.5em Arial;
+        top: -0.35em;
+        left: -0.8em;
+        width: 0;
+        height: 0;
+        text-align: center;
+        margin: 0 0.3em;
+        border-left: 0.5em solid transparent;
+        border-right: 0.5em solid transparent;
+        border-top: 0.35em solid red;
+        vertical-align: middle;
+        content: "";
+        transform: rotate(70deg);
+      }
+      .icon0::after {
+        position: absolute;
+        display: inline-block;
+        font: normal 1em/1.5em Arial;
+        top: -0.35em;
+        left: -0.8em;
+        width: 0;
+        height: 0;
+        text-align: center;
+        margin: 0 0.3em;
+        border-left: 0.5em solid transparent;
+        border-right: 0.5em solid transparent;
+        border-top: 0.35em solid red;
+        vertical-align: middle;
+        content: "";
+        transform: rotate(-70deg);
+      }
+      .icon1 {
+        position: relative;
+        display: inline-block;
+        font: normal 1em/1.5em Arial;
+        height: 1em;
+        width: 1em;
+        top: 0.25em;
+        text-align: center;
+        margin: 0 0.3em;
+        background: #fff;
+        border: 1px solid #00f;
+        border-radius: 100%;
+        box-sizing: border-box;
+      }
+      .icon2 {
+        position: relative;
+        display: inline-block;
+        font: normal 1em/1.5em Arial;
+        height: 1em;
+        width: 1em;
+        top: 0.25em;
+        text-align: center;
+        margin: 0 0.3em;
+        background: #00f;
+        border-radius: 100%;
+      }
+      .icon3 {
+        position: relative;
+        display: inline-block;
+        font: normal 1em/1.5em Arial;
+        height: 1em;
+        width: 1em;
+        top: 0.25em;
+        text-align: center;
+        margin: 0 0.3em;
+        background: #fff;
+        border: 1px solid #00f;
+        box-sizing: border-box;
+      }
+      .icon4 {
+        position: relative;
+        display: inline-block;
+        font: normal 1em/1.5em Arial;
+        height: 1em;
+        width: 1em;
+        top: 0.25em;
+        text-align: center;
+        margin: 0 0.3em;
+        background: #00f;
+      }
+      .button {
+        position: absolute;
+        width: 72px;
+        height: 43px;
+        top: 510px;
+        margin-right: -32px;
+        text-align: center;
+        font-size: 20px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      .buttonR {
+        right: 114px;
+        background-color: white;
+        color: black;
+        border: 2px solid #555555;
+      }
+      .buttonR:hover {
+        background-color: #555555;
+        color: white;
+        transition-duration: 0.4s;
+      }
+      .buttonR:active {
+        background-color: #555555;
+        color: white;
+        transform: translateY(4px);
+        transition-duration: 0;
+      }
+      .buttonH {
+        right: 36px;
+        background-color: white;
+        color: #008cba;
+        border: 2px solid #008cba;
+      }
+      .buttonH:hover {
+        background-color: #008cba;
+        color: white;
+        transition-duration: 0.4s;
+      }
+      .buttonH:active {
+        background-color: #008cba;
+        color: white;
+        transform: translateY(4px);
+        transition-duration: 0;
+      }
+      /*滚动条整体样式*/
+      ::-webkit-scrollbar {
+        width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
+        height: 1px;
+      }
+      /*滚动条里面小方块*/
+      ::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        box-shadow: inset 0 0 2.5px rgba(0, 0, 0, 0.2);
+        background: #535353;
+      }
+      /*滚动条里面轨道*/
+      ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 2.5px rgba(0, 0, 0, 0.2);
+        background: #ededed;
+      }
+    </style>
+    <title>Ajax实现窗格</title>
+  </head>
+  <body>
+    <div id="box1" class="box1"></div>
+    <div id="box2" class="box2"></div>
+    <input
+      type="button"
+      id="refresh"
+      class="button buttonR"
+      value="刷新"
+      onclick="refresh()"
+    />
+    <input
+      type="button"
+      id="handin"
+      class="button buttonH"
+      value="提交"
+      onclick="handin()"
+    />
+    <script>
+      var data;
+      var data_json;
+      var node_id = 0;
+      window.onload = refresh;
+
+      /*从数据源重新获取数据*/
+      function refresh() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            data = JSON.parse(this.responseText);
+            node_id = 0;
+            printData();
+          }
+        };
+        xhttp.open("GET", "http://ext.gaomuxuexi.com:5870/task/nodes", true);
+        xhttp.send();
+      }
+
+      /*显示数据源为树和列表*/
+      function printData() {
+        var box1 = document.getElementById("box1");
+        var box2 = document.getElementById("box2");
+        if (data.no == 200) {
+          box1.innerHTML = "";
+          box2.innerHTML = "";
+          box2.ondragover = drag_over;
+          box2.ondrop = drop_in_list;
+          //绘制树的根节点
+          var ul = document.createElement("ul");
+          box1.appendChild(ul);
+          var li = document.createElement("li");
+          li.className = "list";
+          li.id = "li" + node_id;
+          node_id++;
+          li.ondragenter = drag_enter;
+          li.ondragleave = drag_leave;
+          li.ondragover = drag_over;
+          li.ondrop = drop_in_tree;
+          ul.appendChild(li);
+          //绘制树的其他节点
+          createTree(li, data.tree);
+
+          //绘制列表
+          var ul2 = document.createElement("ul");
+          ul2.style.padding = 0;
+          ul2.id = "ul2";
+          box2.appendChild(ul2);
+          for (var i = 0; i < data.list.length; i++) {
+            var li = document.createElement("li");
+            li.className = "list";
+            li.id = "li" + node_id;
+            node_id++;
+            li.draggable = "true";
+            li.onclick = select;
+            li.ondragstart = drag_start;
+            li.ondragenter = drag_enter;
+            li.ondragleave = drag_leave;
+            li.ondragover = drag_over;
+            li.ondrop = drop_in_list;
+            ul2.appendChild(li);
+            var icon = document.createElement("span");
+            icon.className = "icon" + data.list[i].type;
+            var text = document.createTextNode(" ");
+            icon.appendChild(text);
+            li.appendChild(icon);
+            var text3 = document.createTextNode(data.list[i].N);
+            li.appendChild(text3);
+          }
+
+          //绘制两个滚动条
+          var scr1 = document.createElement("div");
+          var scr2 = document.createElement("div");
+          scr1.className = "scrollbar";
+          box1.appendChild(scr1);
+          scr2.className = "scrollbar";
+          box2.appendChild(scr2);
+        } else if (data.no == 500) {
+          window.alert(data.msg);
+        } else {
+        }
+      }
+
+      /*递归显示出树*/
+      function createTree(root, data) {
+        if (data.C.length >= 1) {
+          var fold = document.createElement("span");
+          fold.className = "fold";
+          fold.setAttribute("onclick", "fold()");
+          var text2 = document.createTextNode("-");
+          fold.appendChild(text2);
+          root.appendChild(fold);
+        }
+        var icon = document.createElement("span");
+        icon.className = "icon" + data.type;
+        root.appendChild(icon);
+        var text3 = document.createTextNode(" ");
+        icon.appendChild(text3);
+        var text = document.createTextNode(data.N);
+        root.appendChild(text);
+        if (data.C.length > 0) {
+          var ul = document.createElement("ul");
+          root.appendChild(ul);
+          for (var i = 0; i < data.C.length; i++) {
+            var li = document.createElement("li");
+            li.className = "list";
+            li.id = "li" + node_id;
+            node_id++;
+            li.draggable = "true";
+            li.ondragstart = drag_start;
+            li.ondragend = drag_end;
+            li.ondragenter = drag_enter;
+            li.ondragleave = drag_leave;
+            li.ondragover = drag_over;
+            li.ondrop = drop_in_tree;
+            ul.appendChild(li);
+            createTree(li, data.C[i]);
+          }
+        }
+      }
+
+      /*响应折叠按钮*/
+      function fold() {
+        var state = event.target.innerHTML;
+        var uls = event.target.parentNode.getElementsByTagName("ul");
+        if (state == "-") {
+          event.target.innerHTML = "+";
+          for (var i = 0; i < uls.length; i++) {
+            uls[i].style.display = "none";
+          }
+        } else {
+          event.target.innerHTML = "-";
+          for (var i = 0; i < uls.length; i++) {
+            uls[i].style.display = "block";
+          }
+        }
+      }
+
+      /*响应列表元素点击选择事件*/
+      function select(event) {
+        if (this.className == "list") {
+          this.className = "list-selected";
+        } else {
+          this.className = "list";
+        }
+        event.stopPropagation();
+      }
+
+      /*响应开始拖动事件*/
+      function drag_start(event) {
+        //点到的是列表中的未选择项
+        if (type_check(this) == "list" && this.className == "list") {
+          var selected_nodes = document.getElementsByClassName("list-selected");
+          //此处不用while和temp,长度会一直变化
+          while (selected_nodes.length > 0) {
+            var temp = selected_nodes[0];
+            temp.className = "list";
+          }
+        }
+        this.className = "list-selected";
+        //dragenter事件读不到;
+        event.dataTransfer.setData("node_id", this.id);
+        event.stopPropagation();
+      }
+
+      /*响应拖动完成事件，目前只用于处理树节点*/
+      function drag_end(event) {
+        this.className = "list";
+      }
+
+      /*响应被拖动到本元素事件*/
+      function drag_enter(event) {
+        if (event.fromElement != null && this.id != event.fromElement.id) {
+          if (this.className != "list-selected") {
+            this.className = "list-dragover";
+          }
+        }
+        event.stopPropagation();
+      }
+      /*响应被拖动到本元素事件*/
+      function drag_leave(event) {
+        if (this.className == "list-dragover") {
+          this.className = "list";
+        }
+        event.stopPropagation();
+      }
+
+      /*使元素可由其他元素拖动到上方*/
+      function drag_over(event) {
+        event.preventDefault();
+      }
+
+      /*检查node是在树还是列表中*/
+      function type_check(node) {
+        var temp = node;
+        while (temp.id != "box1" && temp.id != "box2") {
+          temp = temp.parentNode;
+        }
+        if (temp.id == "box1") {
+          return "tree";
+        } else {
+          return "list";
+        }
+      }
+
+      /*检查a是否为b的父节点*/
+      function is_parent_of(a, b) {
+        var temp = b.parentNode;
+        while (temp.id != "box1") {
+          if (temp.id == a.id) {
+            return true;
+          }
+          temp = temp.parentNode;
+        }
+        return false;
+      }
+
+      /*将元素拖动到树*/
+      function drop_in_tree(event) {
+        var dragged_id = event.dataTransfer.getData("node_id");
+        var source = document.getElementById(dragged_id);
+        //被拖动的是列表结点
+        if (type_check(source) == "list") {
+          //要拖到的是叶子结点
+          if (this.childNodes.length < 3) {
+            var fold = document.createElement("span");
+            fold.className = "fold";
+            fold.setAttribute("onclick", "fold()");
+            var text2 = document.createTextNode("-");
+            fold.appendChild(text2);
+            this.insertBefore(fold, this.childNodes[0]);
+            var ul = document.createElement("ul");
+            var selected_nodes =
+              document.getElementsByClassName("list-selected");
+            //此处不用while和temp,长度会一直变化
+            while (selected_nodes.length > 0) {
+              var temp = selected_nodes[0];
+              temp.className = "list";
+              temp.onclick = null;
+              temp.ondragend = drag_end;
+              temp.ondrop = drop_in_tree;
+              ul.appendChild(temp);
+            }
+            this.appendChild(ul);
+          }
+          //要拖到的不是叶子结点
+          else {
+            var selected_nodes =
+              document.getElementsByClassName("list-selected");
+            //此处不用while和temp,长度会一直变化
+            while (selected_nodes.length > 0) {
+              var temp = selected_nodes[0];
+              temp.className = "list";
+              temp.onclick = null;
+              temp.ondragend = drag_end;
+              temp.ondrop = drop_in_tree;
+              this.childNodes[3].appendChild(temp);
+            }
+          }
+          source.ondrop = drop_in_tree;
+        }
+        //被拖动的是树结点
+        else {
+          //被拖动的节点是自身
+          if (source == this) {
+          }
+          //被拖动的节点不是所拖到节点的父节点
+          else if (!is_parent_of(source, this)) {
+            //先处理source的父节点
+            var sp = source.parentNode.parentNode;
+            //如果父节点只有这一个子节点
+            if (source.parentNode.childNodes.length == 1) {
+              //去掉折叠按钮
+              sp.removeChild(sp.childNodes[0]);
+              //去掉ul
+              sp.removeChild(sp.childNodes[2]);
+            }
+            //要拖到的是叶子结点
+            if (this.childNodes.length < 3) {
+              var fold = document.createElement("span");
+              fold.className = "fold";
+              fold.setAttribute("onclick", "fold()");
+              var text2 = document.createTextNode("-");
+              fold.appendChild(text2);
+              this.insertBefore(fold, this.childNodes[0]);
+              var ul = document.createElement("ul");
+              ul.appendChild(source);
+              this.appendChild(ul);
+            }
+            //要拖到的不是叶子结点
+            else {
+              this.childNodes[3].appendChild(source);
+            }
+          } else {
+            window.alert("不能将父节点拖动到子节点上！");
+          }
+        }
+        this.className = "list";
+        event.stopPropagation();
+      }
+
+      /*将树中元素拖动到列表*/
+      function drop_in_list(event) {
+        var dragged_id = event.dataTransfer.getData("node_id");
+        var source = document.getElementById(dragged_id);
+
+        //先处理source的父节点
+        var sp = source.parentNode.parentNode;
+        //如果父节点只有这一个子节点
+        if (source.parentNode.childNodes.length == 1) {
+          //去掉折叠按钮
+          sp.removeChild(sp.childNodes[0]);
+          //去掉ul
+          sp.removeChild(sp.childNodes[2]);
+        }
+        tree_to_list(source, this);
+        if (this.className == "list-dragover") {
+          this.className = "list";
+        }
+        event.stopPropagation();
+      }
+
+      /*将root为根的树转化为列表项移动到列表中dec前的位置*/
+      function tree_to_list(root, dec) {
+        root.className = "list";
+        root.onclick = select;
+        root.ondragend = null;
+        root.ondrop = drop_in_list;
+        if (dec.id == "box2") {
+          dec.childNodes[0].appendChild(root);
+        } else {
+          dec.parentNode.insertBefore(root, dec);
+        }
+
+        //root不是叶子结点时，需要先处理子节点
+        if (root.childNodes.length > 3) {
+          while (root.childNodes[3].childNodes.length > 0) {
+            tree_to_list(root.childNodes[3].childNodes[0], dec);
+          }
+          //然后处理root,先去掉折叠按钮
+          root.removeChild(root.childNodes[0]);
+          //去掉ul
+          root.removeChild(root.childNodes[2]);
+        }
+      }
+
+      /*提交数据*/
+      function handin() {
+        var xhttp = new XMLHttpRequest();
+        var new_data = organize_data();
+        data_json = JSON.stringify(new_data);
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            window.alert("提交成功！");
+          }
+        };
+        xhttp.open(
+          "POST",
+          "http://ext.gaomuxuexi.com:5870/task/nodesCommit",
+          true
+        );
+        xhttp.setRequestHeader(
+          "Content-type",
+          "application/x-www-form-urlencoded;charset=utf-8"
+        );
+        xhttp.send(data_json);
+      }
+
+      /*将树和列表转化为数据*/
+      function organize_data() {
+        var box1 = document.getElementById("box1");
+        var box2 = document.getElementById("box2");
+        var new_data = {
+          no: 200,
+          list: [],
+          tree: tree_to_data(box1.childNodes[0].childNodes[0]),
+        };
+        for (var i = 0; i < box2.childNodes[0].childNodes.length; i++) {
+          var temp = box2.childNodes[0].childNodes[i];
+          var list_item = {
+            type: Number(temp.childNodes[0].className.charAt(4)),
+            N: temp.childNodes[1].data,
+          };
+          new_data.list.push(list_item);
+        }
+        return new_data;
+      }
+
+      /*将树转化为数据*/
+      function tree_to_data(root) {
+        var temp = root;
+        var node_data;
+        if (temp.childNodes[0].className == "fold") {
+          node_data = {
+            type: Number(temp.childNodes[1].className.charAt(4)),
+            N: temp.childNodes[2].data,
+            C: [],
+          };
+          for (var i = 0; i < temp.childNodes[3].childNodes.length; i++) {
+            node_data.C.push(tree_to_data(temp.childNodes[3].childNodes[i]));
+          }
+        } else {
+          node_data = {
+            type: Number(temp.childNodes[0].className.charAt(4)),
+            N: temp.childNodes[1].data,
+            C: [],
+          };
+        }
+        return node_data;
+      }
+    </script>
+  </body>
+</html>
