@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FinalHomework</title>
+    <style>
+        #leftBox{
+            display: inline-block;
+            width: 60vw;
+            height: 40vh;
+            border: 2px black solid;
+        }
+        .btn {
+            margin: 0;
+            padding: 0;
+
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: blue;
+            text-align: center;
+            color: white;
+        }
+        .btn:hover {
+            cursor: pointer;
+        }
+        .ico1 {
+            position: relative;
+            top: 4px;
+            padding: 0;
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px blue solid;
+            border-radius: 10px;
+        }
+        .ico2 {
+            position: relative;
+            top: 4px;
+            padding: 0;
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px blue solid;
+            border-radius: 10px;
+            background-color: blue;
+        }
+        .ico3 {
+            position: relative;
+            top: 6px;
+            padding: 0;
+            margin: 2px;
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px blue solid;
+        }
+        .ico4 {
+            position: relative;
+            top: 6px;
+            padding: 0;
+            margin: 2px;
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px blue solid;
+            background-color: blue;
+        }
+        ul {
+            list-style-type: none
+        }
+    </style>
+</head>
+<body>
+  <div id="leftBox">
+
+  </div>
+  <div class="rightBox">
+
+  </div>
+
+</body>
+
+<script>
+    window.onload = refresh;
+
+    function XHRProminse(url) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.send();
+            let list = null, tree = null;
+            xhr.onreadystatechange = ()=>{
+                if(xhr.readyState === 4) {
+                    let json = JSON.parse(xhr.responseText)
+                    if (xhr.status === 200)
+                        resolve(json);
+                    else
+                        reject(json);
+                }
+            }
+        });
+    }
+
+    function refresh() {
+        XHRProminse("http://ext.gaomuxuexi.com:5870/task/nodes")
+            .then((res) => {
+                console.log(res);
+                const jsonlist = res.list;
+                const jsontree = res.tree;
+                buildTree(document.getElementById("leftBox"), jsontree)
+                let btns = document.getElementsByClassName("btn");
+                for(let btn of btns) {
+                    btn.onclick = fold;
+                }
+
+            }).catch((err) => {
+                console.error(err)
+        })
+    }
+
+    function buildTree(parent, jsonTree) {
+            let newul = document.createElement("ul");
+            let newli = buildLi(jsonTree);
+            let cldul = document.createElement("ul");
+            newli.appendChild(cldul);
+            for(let i = 0; i < jsonTree.C.length; ++i) {
+                let cldli = document.createElement("li");
+                buildTree(cldli, jsonTree.C[i]);
+                cldul.appendChild(cldli);
+            }
+            newul.appendChild(newli);
+            parent.appendChild(newul);
+    }
+
+    function buildLi(jsonTree) {
+        const newchild = document.createElement("li");
+        const spa = document.createElement("span");
+        if(jsonTree.C.length !== 0)
+        {
+            spa.classList.add("btn");
+            spa.innerText = "-"
+            const ico = document.createElement("span");
+            ico.classList.add("ico" + jsonTree.type)
+            newchild.appendChild(spa);
+            newchild.appendChild(ico);
+        }
+        else
+        {
+            spa.classList.add("ico" + jsonTree.type)
+            newchild.appendChild(spa);
+        }
+        newchild.innerHTML += jsonTree.N;
+        return newchild;
+    }
+
+    function fold() {
+        let parentli = event.target.parentNode;
+        let chr = parentli.getElementsByTagName("ul")
+        if(event.target.innerHTML === "-")
+        {
+            for(let i = 0; i < chr.length; ++i)
+            {
+                chr[i].style.display = "none"
+            }
+            event.target.innerHTML = "+";
+        }
+        else
+        {
+            for(let i = 0; i < chr.length; ++i)
+            {
+                chr[i].style.display = "block"
+            }
+            event.target.innerHTML = "-";
+        }
+
+    }
+
+
+
+
+</script>
+
+</html>
