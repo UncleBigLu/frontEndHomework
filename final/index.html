@@ -6,9 +6,18 @@
     <style>
         #leftBox{
             display: inline-block;
-            width: 60vw;
+            width: 55vw;
             height: 40vh;
             border: 2px black solid;
+            overflow: scroll;
+        }
+        #rightBox{
+            display: inline-block;
+            width: 40vw;
+            margin-left: 1vw;
+            height: 40vh;
+            border: 2px black solid;
+            overflow: scroll;
         }
         .btn {
             margin: 0;
@@ -75,7 +84,7 @@
   <div id="leftBox">
 
   </div>
-  <div class="rightBox">
+  <div id="rightBox">
 
   </div>
 
@@ -108,14 +117,16 @@
                 console.log(res);
                 const jsonlist = res.list;
                 const jsontree = res.tree;
-                buildTree(document.getElementById("leftBox"), jsontree)
+                buildTree(document.getElementById("leftBox"), jsontree);
+                buildList(document.getElementById("rightBox"), jsonlist);
                 let btns = document.getElementsByClassName("btn");
+
                 for(let btn of btns) {
                     btn.onclick = fold;
                 }
 
             }).catch((err) => {
-                console.error(err)
+                console.error(err);
         })
     }
 
@@ -133,10 +144,18 @@
             parent.appendChild(newul);
     }
 
+    function buildList(parent, jsonList) {
+        let newul = document.createElement("ul");
+        for(let obj of jsonList){
+            newul.appendChild(buildLi(obj))
+        }
+        parent.appendChild(newul);
+    }
+
     function buildLi(jsonTree) {
         const newchild = document.createElement("li");
         const spa = document.createElement("span");
-        if(jsonTree.C.length !== 0)
+        if(('C' in jsonTree) && jsonTree.C.length !== 0)
         {
             spa.classList.add("btn");
             spa.innerText = "-"
