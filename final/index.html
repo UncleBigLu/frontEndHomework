@@ -22,13 +22,11 @@
         .btn {
             margin: 0;
             padding: 0;
-
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            background-color: blue;
+            width: 1em;
+            height: 1em;
             text-align: center;
-            color: white;
+            border: 1px black solid;
         }
         .btn:hover {
             cursor: pointer;
@@ -133,10 +131,18 @@
     function buildTree(parent, jsonTree) {
             let newul = document.createElement("ul");
             let newli = buildLi(jsonTree);
+            if(jsonTree.type !== 0){
+                newli.draggable = true;
+                newli.ondrag = drag_start;
+                newli.ondragover = drag_over;
+                newli.ondragend = drag_end;
+                newli.ondrop = drop_tree;
+            }
             let cldul = document.createElement("ul");
             newli.appendChild(cldul);
             for(let i = 0; i < jsonTree.C.length; ++i) {
                 let cldli = document.createElement("li");
+                cldli.draggable = true;
                 buildTree(cldli, jsonTree.C[i]);
                 cldul.appendChild(cldli);
             }
@@ -147,7 +153,12 @@
     function buildList(parent, jsonList) {
         let newul = document.createElement("ul");
         for(let obj of jsonList){
-            newul.appendChild(buildLi(obj))
+            let newli = buildLi(obj);
+            newli.draggable = true;
+            newli.ondrag = drag_start;
+            newli.ondragover = drag_over;
+            newli.ondragend = drag_end;
+            newul.appendChild(newli);
         }
         parent.appendChild(newul);
     }
@@ -194,6 +205,47 @@
         }
 
     }
+
+    var drag_tgt = null;
+    function drag_start(ev) {
+        ev.dataTransfer.dropEffect = "move";
+        drag_tgt = ev.target;
+    }
+    function drag_end(ev) {
+        drag_tgt = null;
+    }
+    function drag_over(ev) {
+        ev.preventDefault();
+        ev.dataTransfer.dropEffect = "move";
+    }
+    function drop_tree(ev) {
+        if (drag_tgt === null)
+            return;
+        console.log(ev.target.childElementCount);
+        if(ev.target.childElementCount === 2)
+        {
+            // No child element yet, add a fold button and create
+            // a new ul, put li into it.
+            let btn = document.createElement("span");
+            btn.classList.add("btn");
+            btn.innerText = "-";
+            btn.onclick = fold;
+            ev.target.insertBefore(btn, ev.target.firstChild);
+
+            let newul = document.createElement("ul");
+            newul.appendChild(drag_tgt);
+            ev.target.appendChild(newul);
+        }
+        else
+        {
+            // Already have child element, add li into it.
+            let cldul = ev.target.lastChild;
+            cldul.appendChild(drag_tgt);
+        }
+        drag_tgt = null;
+    }
+
+
 
 
 
